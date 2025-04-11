@@ -30,7 +30,8 @@ export const fetch = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const id = req.params.id;
+    const userData = new User(req.body);
+    const id = req.query.id;
     const userExist = await User.findOne({ _id: id });
     if (!userExist) {
       return res.status(404).json({ message: "User not Found." });
@@ -43,6 +44,30 @@ export const update = async (req, res) => {
     res.status(500).json({ error: "Internal Server error" });
   }
 };
+
+// export const update = async (req, res) => {
+//   try {
+//     const { id, ...updateData } = req.body; // Extract `id` and rest of the update data
+
+//     if (!id) {
+//       return res.status(400).json({ message: "User ID is required." });
+//     }
+
+//     const userExist = await User.findById(id);
+//     if (!userExist) {
+//       return res.status(404).json({ message: "User not Found." });
+//     }
+
+//     const updateUser = await User.findByIdAndUpdate(id, updateData, {
+//       new: true,
+//     });
+
+//     res.status(200).json(updateUser);
+//   } catch (error) {
+//     console.error("Update Error:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
 
 // export const update = async (req, res) => {
 //   try {
@@ -69,7 +94,7 @@ export const update = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.headers.id;
     const userExist = await User.findById({ _id: id });
     if (!userExist) {
       return res.status(404).json({ message: "User Not Found." });
